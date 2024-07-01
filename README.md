@@ -14,13 +14,13 @@
  
 ## Capturas
 
-[![Captura-de-pantalla-335.png](https://i.postimg.cc/B64Xmh1Q/Captura-de-pantalla-335.png)](https://postimg.cc/gwtzJHDf)
+[![Captura-de-pantalla-335.png](https://i.postimg.cc/7PtJWWJT/Captura-de-pantalla-335.png)](https://postimg.cc/Rqf03GRM)
 
-[![Captura-de-pantalla-336.png](https://i.postimg.cc/RZsbPSCk/Captura-de-pantalla-336.png)](https://postimg.cc/cv3mCNnh)
+[![Captura-de-pantalla-336.png](https://i.postimg.cc/GmCDFssM/Captura-de-pantalla-336.png)](https://postimg.cc/bsmd8rgb)
 
-[![Captura-de-pantalla-338.png](https://i.postimg.cc/HxGzKjqh/Captura-de-pantalla-338.png)](https://postimg.cc/f3KYSWTc)
+[![Captura-de-pantalla-338.png](https://i.postimg.cc/V6prdS8W/Captura-de-pantalla-338.png)](https://postimg.cc/7G1YRZb5)
 
-[![Captura-de-pantalla-339.png](https://i.postimg.cc/5y4Bdznn/Captura-de-pantalla-339.png)](https://postimg.cc/S2P2cn0M)
+[![Captura-de-pantalla-339.png](https://i.postimg.cc/v8nD0ZyC/Captura-de-pantalla-339.png)](https://postimg.cc/jCss5KLh)
 
  
 ## Reglas de Juego / Instrucciones
@@ -36,7 +36,7 @@ Periféricos: teclado, altavoz o auriculares
   ⬅ MOVER A  LA IZQUIERDA
   ⬇ MOVER ABAJO
   ➡ MOVER A LA DERECHA
-  s DISPARAR
+- s DISPARAR
 
 - Nivel 1: El objetivo es llegar a los 1000 puntos sobreviviendo a la horda de cascarudos, eliminandolos con impactos de bala en este nivel el jugador posee un rifle.
 - Nivel 2: El objetivo es llegar a los 1000 puntos sobreviviendo al ataque de Hombres Robots quienes podrán disparar sus armas. Al principio del nivel se puede optar por usar un rifle,
