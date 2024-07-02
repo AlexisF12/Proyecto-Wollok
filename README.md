@@ -1,4 +1,4 @@
-# El Eternauta
+# El Eternauta.
 
 ## Siempre azúcar nunca edulcorante
 
