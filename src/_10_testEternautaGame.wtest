@@ -3,6 +3,7 @@ import _07_personaje.*
 import _09_municion.*
 import _04_elementosEnEscenario.*
 
+
 describe "Disparos a Cascarudos, Hombres Robots y Juan" {
 
 	const cascarudo1 = new Cascarudo()
@@ -11,7 +12,6 @@ describe "Disparos a Cascarudos, Hombres Robots y Juan" {
 	const balaRevolverDeJuan = new BalaDeRevolver()
 	const balaFusilDeJuan = new BalaDeFusil()
 
-// const balaDeRobot = new MunicionHombreRobot(position = juan.position())
 	test "Cascarudo recibe 100 de daño por cada disparo de bala de rifle" {
 		cascarudo1.serImpactado(balaRifleDeJuan)
 		assert.equals(100, cascarudo1.vida())
