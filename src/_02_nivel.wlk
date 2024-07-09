@@ -21,31 +21,8 @@ class Nivel inherits Escenario {
 
 	const property frames
 	var property indiceFrame = 0
-	var property indiceNivel
 	var property sound = new MusicaJuego()
-
-	method reiniciarNivel() {
-		game.clear()
-		sound.reanudarMusica()
-		juan.resetearFuncionalidades()
-		self.jugarNivel()
-	}
-
-	method pasarDeNivel() {
-		sound.pararMusica()
-		game.clear()
-		juan.resetearFuncionalidades()
-		juego.numeroNivel(indiceNivel)
-		juego.iniciar()
-	}
-
-	method mostrarHistoria()
-
-	method jugarNivel() {
-		self.agregarVisuales()
-		juan.activarTeclas()
-	}
-
+	
 	method agregarVisuales() {
 		game.addVisual(juan)
 		game.addVisual(puntuacion)
@@ -53,23 +30,53 @@ class Nivel inherits Escenario {
 		const botiquin = new Botiquin()
 		botiquin.generarBotiquines()
 	}
+	
+	method mostrarHistoria() {
+		if (indiceFrame < frames.size()) {
+			frames.get(indiceFrame).mostrar()
+			indiceFrame += 1
+		} else {
+			game.clear()
+			self.mostrarMenu()
+		}
+	}
+	
+	method mostrarMenu()
+	
+	method jugarNivel() {
+		self.agregarVisuales()
+		juan.activarFuncionalidades()
+	}
 
+	method reiniciarNivel() {
+		game.clear()
+		sound.reanudarMusica()
+		self.resetearFuncionalidades()
+		self.jugarNivel()
+	}
+	
+	method resetearFuncionalidades() {
+		juan.resetearFuncionalidades()
+	}
+
+	method pasarDeNivel() {
+		sound.pararMusica()
+		game.clear()
+		juan.resetearFuncionalidades()
+		juego.siguienteNivel()
+		juego.iniciar()
+	}
 }
 
-object nivel1 inherits Nivel(frames = [ historiaUno, historiaDos, historiaTres ], indiceNivel = 1) {
+object nivel1 inherits Nivel(frames = [ historiaUno, historiaDos, historiaTres ]) {
 
 	override method dimensionarEscenario() {
 		super()
 		menu.mostrar()
 	}
-
-	override method mostrarHistoria() {
-		if (indiceFrame < frames.size()) {
-			frames.get(indiceFrame).mostrar()
-		} else {
-			game.clear()
-			mainMenu.mostrar()
-		}
+	
+	override method mostrarMenu() {
+		mainMenu.mostrar()
 	}
 
 	override method jugarNivel() {
@@ -84,20 +91,16 @@ object nivel1 inherits Nivel(frames = [ historiaUno, historiaDos, historiaTres ]
 	}
 }
 
-object nivel2 inherits Nivel(frames = [ historiaCuatro ], indiceNivel = 2) {
+object nivel2 inherits Nivel(frames = [ historiaCuatro ]) {
 
 	override method dimensionarEscenario() {
 		super()
 		game.clear()
-		objetivoLogradoNivel1.mostrar()
+		new ObjetivoLogrado().mostrar()
 	}
-
-	override method mostrarHistoria() {
-		if (indiceFrame < frames.size()) {
-			frames.get(indiceFrame).mostrar()
-		} else {
-			selectArma1.mostrar()
-		}
+	
+	override method mostrarMenu() {
+		menuArmas.mostrar()
 	}
 
 	override method jugarNivel() {
@@ -115,28 +118,21 @@ object nivel2 inherits Nivel(frames = [ historiaCuatro ], indiceNivel = 2) {
 	}
 }
 
-object nivel3 inherits Nivel(frames = [ historiaCinco ], indiceNivel = 3) {
+object nivel3 inherits Nivel(frames = [ historiaCinco ]) {
 
 	override method dimensionarEscenario() {
 		super()
 		game.clear()
-		objetivoLogradoNivel2.mostrar()
+		new ObjetivoLogrado().mostrar()
 	}
 
-	override method mostrarHistoria() {
-		if (indiceFrame < frames.size()) {
-			frames.get(indiceFrame).mostrar()
-		} else {
-			selectArma2.mostrar()
-		}
+	override method mostrarMenu() {
+		menuArmas.mostrar()
 	}
 	
-	override method reiniciarNivel() {
-		game.clear()
-		sound.reanudarMusica()
+	override method resetearFuncionalidades() {
 		vidaEscudoRayo.resetearVida()
-		juan.resetearFuncionalidades()
-		self.jugarNivel()
+		super()
 	}
 
 	override method jugarNivel() {
