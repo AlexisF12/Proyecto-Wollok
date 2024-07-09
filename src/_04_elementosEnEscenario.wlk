@@ -123,7 +123,7 @@ object puntuacion {
 
 	method sumarPuntos(enemigo) {
 		puntos = 1000.min(puntos + enemigo.puntosOtorgadosPorMuerte())
-		if (puntos >= 300) {
+		if (puntos >= 1000) {
 			game.schedule(200, { juego.nivelActual().pasarDeNivel()})
 		}
 	}
