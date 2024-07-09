@@ -48,7 +48,7 @@ object fusil inherits ArmaDeJuan (cadencia = 300) {
 	override method juanArmaReposo() = "juanSalvo/Juan_Fusil_Reposo-176x192.png"
 }
 
-class RayoTerrenal inherits Objeto(esEnemigo = true) {
+class RayoTerrenal inherits Objeto {
 	var property cadencia
 
 	method atacar() {
@@ -68,12 +68,12 @@ class RayoTerrenal inherits Objeto(esEnemigo = true) {
 	}
 }
 
-object rayo1 inherits RayoTerrenal(position = game.at(16, 1), image = "lanza_rayos (2) (1).png", cadencia = (0 .. 800).anyOne()) {}
-object rayo2 inherits RayoTerrenal(position = game.at(16, 3), image = "lanza_rayos (2) (1).png", cadencia = (800 .. 1700).anyOne()) {}
+object rayo1 inherits RayoTerrenal(position = game.at(16, 1), image = "lanza_rayos (2) (1).png", cadencia = (0 .. 1000).anyOne()) {}
+object rayo2 inherits RayoTerrenal(position = game.at(16, 3), image = "lanza_rayos (2) (1).png", cadencia = (1000 .. 2000).anyOne()) {}
 
 
 object nave inherits Objeto(position = game.at(18, 8), image = "nave_alien.png"){
-	var property cadencia = 600
+	var property cadencia = 1000
 
 	method atacar() {
 		position = game.at((0 .. 14).anyOne(), game.height() - 2)

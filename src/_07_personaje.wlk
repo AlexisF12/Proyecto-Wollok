@@ -9,44 +9,22 @@ import _03_frames.*
 class Objeto {
 	var property position
 	var property image
-	var property esEnemigo = false
-	const property esMunicion = false
-	const property esBotiquin = false
 	
 	method serImpactado(objeto) {}
+	
+	method esMunicionEnemiga() = false
+	
+	method sumarPuntosPorMuerte(){}
 	
 	method desactivarFuncionalidades() {}
 }
 
-class Botiquin inherits Objeto(position = game.at((0..13).anyOne(), [1, 3].anyOne()), image = "Botiquin_112x50.png", esBotiquin = true) {
-	
-	const property id = self.identity().toString()
-	
-	method generarBotiquines() {
-		game.onTick(10000, "generar_botiquin", { const nuevoBotiquin = new Botiquin()
-			nuevoBotiquin.crear()
-		})
-	}
-	
-	method crear() {
-		position = self.position()
-		game.addVisual(self)
-	}
-
-	method serUsado() {
-		vidaJuan.sumarVida()
-		self.desactivarFuncionalidades()
-	}
-	
-	override method desactivarFuncionalidades() {
-		game.removeVisual(self)
-	}
-}
-
 /*Clase general de todos los personajes. */
 class Personaje inherits Objeto{
-	var property vida
+	var vida
 	var property estaMuerto = false
+	
+	method vida() = vida
 	
 	method morir()
 }
@@ -61,12 +39,13 @@ object juan inherits Personaje(
     var puedeMoverse = true 
 	
     /* Activar las teclas de movimiento y acción del jugador */
-    method activarTeclas() {
+    method activarFuncionalidades() {
         keyboard.up().onPressDo{self.moverArriba()}
         keyboard.right().onPressDo{self.moverDerecha()}
         keyboard.down().onPressDo{self.moverAbajo()}
         keyboard.left().onPressDo{self.moverIzquierda()}
-        keyboard.s().onPressDo{self.accionarArma()} 
+        keyboard.s().onPressDo{self.accionarArma()}
+        self.efectoDeColision()
     }
 
     /* Desactivar las funcionalidades del jugador */
@@ -76,20 +55,19 @@ object juan inherits Personaje(
         arma.estaSobrecalentado(true)
     }
     
+    method danio() = 0
+    
     /* Causar daño al jugador si colisiona con un enemigo */
     method efectoDeColision() {
-        game.onCollideDo(self, { objeto =>
-            if (!estaMuerto && objeto.esEnemigo() && !objeto.yaCausoDanio()){
-                self.serImpactado(objeto)
-                objeto.desactivarFuncionalidades()
-            } else if(objeto.esBotiquin()) {
-            	objeto.serUsado()
-            }
-        })
-    }
+        game.onCollideDo(self, { objeto => objeto.serImpactado(self) objeto.desactivarFuncionalidades()})
+     }
     
     override method serImpactado(objeto) {
-    	vidaJuan.restarVida(objeto.danio())
+    	vidaJuan.restarVida(objeto)
+    }
+    
+    method usar() {
+    	vidaJuan.sumarVida()
     }
 
     /* Reiniciar todas las funcionalidades del jugador */
@@ -107,7 +85,6 @@ object juan inherits Personaje(
     method moverIzquierda() {
         if (puedeMoverse) {
             position = game.at((position.x()-1).max(0), position.y())
-            self.efectoDeColision()
             self.cambiarImagenAMovimientoIzquierda()
 			game.schedule(1000, {if (!estaMuerto) self.revertirImagenOriginal() self.iniciarPeriodoDeEsperaParaMovimiento()})
         }
@@ -117,7 +94,6 @@ object juan inherits Personaje(
     method moverDerecha() {
         if (puedeMoverse) {
             position = game.at((position.x()+1).min(13), position.y())
-            self.efectoDeColision()
             self.cambiarImagenAMovimientoDerecha()
             game.schedule(1000, {if (!estaMuerto) self.revertirImagenOriginal() self.iniciarPeriodoDeEsperaParaMovimiento()})
         }
@@ -180,7 +156,6 @@ object juan inherits Personaje(
         game.schedule(200, { if (!estaMuerto) puedeMoverse = true })
     }
 
-    /*TODO Simula la muerte del jugador y muestra la pantalla de Game Over */
     override method morir() {
         self.desactivarFuncionalidades()
 		const nuevaMuerte = new MuerteJuan(image = image, position = position, nombreTick = "Muerte Juan")
@@ -197,13 +172,10 @@ object juan inherits Personaje(
 }
 
 /* Clase base para los enemigos del juego */
-class Enemigo inherits Personaje(position = game.at(game.width(), [ 1, 3 ].anyOne()), esEnemigo = true) {
+class Enemigo inherits Personaje(position = game.at(game.width(), [ 1, 3 ].anyOne())) {
 	const property danio
-	const property puntosOtorgadoPorMuerte
+	const property puntosOtorgadosPorMuerte
 	const property id = self.identity().toString()
-	var property yaCausoDanio = false
-	var property indiceImagen = 0
-	const property imagenesCaminar
 
 	/* Crear y agregar el enemigo al juego */
 	method crear() {
@@ -227,6 +199,10 @@ class Enemigo inherits Personaje(position = game.at(game.width(), [ 1, 3 ].anyOn
 	/* Manejar el impacto de un objeto con el enemigo */
 	override method serImpactado(objeto) {
 		vida = 0.max(vida - objeto.danio())
+		objeto.serImpactado(self)
+	}
+	
+	override method sumarPuntosPorMuerte() {
 		if (vida == 0) {
 			self.desactivarFuncionalidades()
 			puntuacion.sumarPuntos(self)
@@ -237,16 +213,47 @@ class Enemigo inherits Personaje(position = game.at(game.width(), [ 1, 3 ].anyOn
 	method movimiento()
 }
 
+/* Clase Cascarudo que hereda de Enemigo */
+class Cascarudo inherits Enemigo(image = "cascarudo/Cascarudo_Base_Izquierda-176x176.png",
+	 vida = 200,
+	 danio = 50,
+	 puntosOtorgadosPorMuerte = 50) {
+	
+	const property animacion = new CascarudoCaminando(image = self.image(), position = self.position())
+	var property tiempoCreacion = 1000
+	
+	/* Generar enemigos Cascarudo periódicamente */
+	method generarEnemigos() {
+		game.onTick(tiempoCreacion, "generar_cascarudos", { const nuevoCascarudo = new Cascarudo()
+			nuevoCascarudo.crear()
+		})
+	}
+	/* Movimiento del Cascarudo */
+    override method movimiento() {
+        game.onTick(150, id + "_movimiento", { self.desplazarse() })
+        game.onTick(400, id + "_cambiarImagen", { self.cambiarImagen() })
+    }
+
+    /* Cambiar la imagen del Cascarudo */
+    method cambiarImagen() {
+        animacion.cambiarImagen()
+        image = animacion.image()
+    }
+
+	override method morir() {
+		estaMuerto = true
+		const nuevaMuerte = new MuerteCascarudo(image = self.image(), position = self.position(), nombreTick = self.id() + "Muerte Cascarudo")
+		game.removeVisual(self)
+		game.addVisual(nuevaMuerte)
+		nuevaMuerte.mostrar()
+	}
+}
+
 /* Clase HombreRobot que hereda de Enemigo */
 class HombreRobot inherits Enemigo(image = "hombresRobots/Hombre_Robot_Base-272x192.png",
 	vida = 100,
 	danio = 10,
-	puntosOtorgadoPorMuerte = 50,
-	imagenesCaminar =  
-		["hombresRobots/Hombre_Robot_Caminar_1-272x192.png",
-	   	"hombresRobots/Hombre_Robot_Caminar_2-272x192.png",
-	   	"hombresRobots/Hombre_Robot_Caminar_3-272x192.png",
-	   	"hombresRobots/Hombre_Robot_Caminar_4-272x192.png"]	) {
+	puntosOtorgadosPorMuerte = 50) {
 	   		
 	 const property animacion = new HombreRobotCaminando(image = self.image(), position = self.position())
 
@@ -258,7 +265,7 @@ class HombreRobot inherits Enemigo(image = "hombresRobots/Hombre_Robot_Base-272x
 
 	/* Generar enemigos HombreRobot periódicamente */
 	method generarEnemigos() {
-		game.onTick(1500, "generar_hombres_robots", { const nuevoHombreRobot = new HombreRobot()
+		game.onTick(2000, "generar_hombres_robots", { const nuevoHombreRobot = new HombreRobot()
 			nuevoHombreRobot.crear()
 		})
 	}
@@ -271,7 +278,7 @@ class HombreRobot inherits Enemigo(image = "hombresRobots/Hombre_Robot_Base-272x
     
     /* Movimiento del HombreRobot */
 	override method movimiento() {
-		game.onTick((500..800).anyOne(), id + "_movimiento", { self.desplazarse()})
+		game.onTick((600..900).anyOne(), id + "_movimiento", { self.desplazarse()})
 		game.onTick(400, id + "_cambiarImagen", { self.cambiarImagen()})
 	}
     
@@ -285,7 +292,6 @@ class HombreRobot inherits Enemigo(image = "hombresRobots/Hombre_Robot_Base-272x
 		})
 	}
 
-	/*TODO Muerte del HombreRobot */
 	override method morir() {
 		estaMuerto = true
 		const nuevaMuerte = new MuerteHombreRobot(image = self.image(), position = self.position(), nombreTick = self.id() + "Muerte Hombre Robot")
@@ -315,48 +321,9 @@ class HombreRobot inherits Enemigo(image = "hombresRobots/Hombre_Robot_Base-272x
 	}
 }
 
-/* Clase Cascarudo que hereda de Enemigo */
-class Cascarudo inherits Enemigo(image = "cascarudo/Cascarudo_Base_Izquierda-176x176.png",
-	 vida = 200,
-	 danio = 50,
-	 puntosOtorgadoPorMuerte = 50,
-	 imagenesCaminar = [ "cascarudo/Cascarudo_Caminar_1-176x176.png", "cascarudo/Cascarudo_Caminar_2-176x176.png" ]) {
-	
-	const property animacion = new CascarudoCaminando(image = self.image(), position = self.position())
-	var property tiempoCreacion = 900
-	//const property animacion = new CascarudoCaminando(image = self.image(), position = self.position())
-	
-	/* Generar enemigos Cascarudo periódicamente */
-	method generarEnemigos() {
-		game.onTick(tiempoCreacion, "generar_cascarudos", { const nuevoCascarudo = new Cascarudo()
-			nuevoCascarudo.crear()
-		})
-	}
-	/* Movimiento del Cascarudo */
-    override method movimiento() {
-        game.onTick(150, id + "_movimiento", { self.desplazarse() })
-        game.onTick(400, id + "_cambiarImagen", { self.cambiarImagen() })
-    }
-
-    /* Cambiar la imagen del Cascarudo */
-    method cambiarImagen() {
-        animacion.cambiarImagen()
-        image = animacion.image()
-    }
-
-	/*TODO Muerte del Cascarudo */
-	override method morir() {
-		estaMuerto = true
-		const nuevaMuerte = new MuerteCascarudo(image = self.image(), position = self.position(), nombreTick = self.id() + "Muerte Cascarudo")
-		game.removeVisual(self)
-		game.addVisual(nuevaMuerte)
-		nuevaMuerte.mostrar()
-	}
-}
-
 object mano inherits Personaje(position = game.at(17, 2), image = "Mano.png", vida = vidaEscudoRayo.vida()) {
 
-	var property tiempoAtaque = 2000
+	var property tiempoAtaque = 1700
 	const property armaTerrenal = [ rayo1, rayo2 ]
 	const property armaAerea = nave
 	const property puntosOtorgadosPorMuerte = 1000

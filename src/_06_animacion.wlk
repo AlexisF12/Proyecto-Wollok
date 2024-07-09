@@ -21,7 +21,6 @@ class HombreRobotCaminando inherits AnimacionCaminar(escenas =["hombresRobots/Ho
 class AnimacionMuerte inherits Animacion {
 	var property nombreTick
 	
-	/*TODO methodo modificado */
 	method mostrar() { 
 		game.onTick(tiempo, nombreTick, {
 			if (indice < escenas.size()) {
