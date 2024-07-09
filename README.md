@@ -1,4 +1,4 @@
-# El Eternauta
+# El Eternauta.
 
 ## Siempre azúcar nunca edulcorante
 
@@ -24,8 +24,9 @@
 
  
 ## Reglas de Juego / Instrucciones
-- Reglas genéricas: Si se pierde en cualquier nivel se da la posibilidad de reiniciar el mismo nivel. El jugador pierde puntos de vida ante cualquier impacto de enemigos, el daño producido depende del enemigo; asimismo el danio por impacto de bala a los enemigos dependerá de la fuerza de danio del arma que posea el jugador.
-Cada cierto tiempo estará disponible un botiquín que ayudará al jugador a recuperar salud.
+- Reglas genéricas: Si se pierde en cualquier nivel se da la posibilidad de reiniciar el mismo.
+- El jugador pierde puntos de vida ante cualquier impacto de enemigos, el daño recibido depende del tipo de enemigo. Asimismo, el daño recibido por los enemigos por impacto de bala , dependerá del tipo de arma que posea el jugador.
+- Cada cierto tiempo estará disponible un botiquín que ayudará al jugador a mejorar su nivel de salud.
 
 ## Mecánicas
 
@@ -38,10 +39,9 @@ Periféricos: teclado, altavoz o auriculares
   ➡ MOVER A LA DERECHA
 - s DISPARAR
 
-- Nivel 1: El objetivo es llegar a los 1000 puntos sobreviviendo a la horda de cascarudos, eliminandolos con impactos de bala en este nivel el jugador posee un rifle.
-- Nivel 2: El objetivo es llegar a los 1000 puntos sobreviviendo al ataque de Hombres Robots quienes podrán disparar sus armas. Al principio del nivel se puede optar por usar un rifle,
-revolver o fusil.
-- Nivel 3: El objetivo eliminar al jefe final disparándole a los escudos de los rayos que generará una explosión y así poder rescatar a la familia del personaje principal. Al principio del nivel se puede optar por usar un rifle, revolver o fusil.
+- Nivel 1: El objetivo es llegar a los 1000 puntos sobreviviendo a la horda de cascarudos, eliminandolos con impactos de bala. En este nivel el jugador posee un rifle.
+- Nivel 2: El objetivo es llegar a los 1000 puntos sobreviviendo al ataque de Hombres Robots los cuales cuentan con un arma de fuego. Al principio del nivel se puede optar por usar un rifle, revólver o fusil.
+- Nivel 3: El objetivo eliminar al jefe final destruyendo los rayos que lo escudan. Al destruirlos, se generará una explosión que destruirá al enemigo para así poder rescatar a la familia del personaje principal. Al principio del nivel se puede optar por usar un rifle, revolver o fusil.
 
 ## Otros
 
