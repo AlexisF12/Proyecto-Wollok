@@ -12,5 +12,7 @@ object juego {
 	
 	method nivelActual() = self.niveles().get(self.numeroNivel())
 	
+	method siguienteNivel() { numeroNivel += 1 }
+	
 	method detener() { game.schedule(1500, {game.stop()}) }
 }
