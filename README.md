@@ -1,6 +1,6 @@
 # El Eternauta.
 
-## Siempre azúcar nunca edulcorante
+## Syntax Error Squad
 
 - Paz, Facundo Leonel
 - Agüero, Marisol
